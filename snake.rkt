@@ -3,13 +3,12 @@
 #reader(lib "htdp-intermediate-lambda-reader.ss" "lang")((modname snake) (read-case-sensitive #t) (teachpacks ()) (htdp-settings #(#t constructor repeating-decimal #f #t none #f () #t)))
 (require 2htdp/image)
 (require 2htdp/universe)
-(require spd/tags)
 (require racket/list)
 
 ;; My Snake program
 ;; Written by Rio Weil, 2020/12/29
 
-(@htdw GameState)
+;;(@htdw GameState)
 ;; =================
 ;; Constants:
 
@@ -51,7 +50,7 @@
 
 ;; =================
 ;; Data definitions:
-(@htdd Direction)
+;;(@htdd Direction)
 ;; Direction is one-of:
 ;;           - "left"
 ;;           - "right"
@@ -65,7 +64,7 @@
         [(string=? "up" d) (...)]
         [else (...)]))
                 
-(@htdd Position)
+;;(@htdd Position)
 (define-struct pos (x y))
 ;; Position is (make-pos Natural Natural)
 ;; interp. is a position of some cell on the board with x, y coords
@@ -81,7 +80,7 @@
        (pos-y p)))
 
 
-(@htdd GameRun)
+;;(@htdd GameRun)
 ;; GameRun is one of:
 ;;         - "start"
 ;;         - "running"
@@ -96,8 +95,8 @@
         [else (...)]))
 
 
-(@htdf create-food)
-(@signature (listof Position) -> Position)
+;;(@htdf create-food)
+;;(@signature (listof Position) -> Position)
 ;; Produces a random valid position not included in the provided list.
 ;; For game, places food piece in position not occupied currently by snake.
 
@@ -109,7 +108,7 @@
         (create-food lop))))
 
 
-(@htdd GameState)
+;;(@htdd GameState)
 (define-struct gs (snake dir food run))
 ;; GameState is (make-gs (listof Position) Direction Position GameRun)
 ;; interp. is the state of the Snake Game.
@@ -156,11 +155,11 @@
 ;; =================
 ;; Functions:
 
-(@htdf main)
-(@signature GameState -> GameState)
+;;(@htdf main)
+;;(@signature GameState -> GameState)
 ;; start the world with (main START-GS)
 
-(@template htdw-main)
+;;(@template htdw-main)
 
 (define (main g)
   (big-bang g                               ; GameState
@@ -170,8 +169,8 @@
             (on-key    control-direction))) ; GameState KeyEvent -> GameState
 
 
-(@htdf tock)
-(@signature GameState -> GameState)
+;;(@htdf tock)
+;;(@signature GameState -> GameState)
 ;; Produce next GameState.
 ;; If game is at start/game over/win screen, do nothing.
 ;; If game is running, move snake head one space in dir direction,
@@ -251,8 +250,8 @@
                          "running")])]
         [else g]))
 
-(@htdf going-to-hit-wall?)
-(@signature Position Direction -> Boolean)
+;;(@htdf going-to-hit-wall?)
+;;(@signature Position Direction -> Boolean)
 ;; Produces true if position incremented in direction will hit wall.
 (check-expect (going-to-hit-wall? (make-pos 1 (/ CTR-Y CELL-SIZE)) "left") false)
 (check-expect (going-to-hit-wall? (make-pos 0 (/ CTR-Y CELL-SIZE)) "left") true)
@@ -274,8 +273,8 @@
 (define (going-to-hit-wall? p d)
   (hit-wall? (next-pos p d)))
 
-(@htdf hit-wall?)
-(@signature Position -> Boolean)
+;;(@htdf hit-wall?)
+;;(@signature Position -> Boolean)
 ;; Produces true if provided position (snake head) has hit a wall/out of bounds.
 (check-expect (hit-wall? (make-pos -1 (/ CTR-Y CELL-SIZE))) true)
 (check-expect (hit-wall? (make-pos 0 (/ CTR-Y CELL-SIZE))) false)
@@ -294,8 +293,8 @@
   (not (and (<= 0 (pos-x p) (- (/ WIDTH CELL-SIZE) 1))
             (<= 0 (pos-y p) (- (/ HEIGHT CELL-SIZE) 1)))))
 
-(@htdf going-to-hit-body?)
-(@signature (listof Position) Direction -> Boolean)
+;;(@htdf going-to-hit-body?)
+;;(@signature (listof Position) Direction -> Boolean)
 ;; Produces true if snake moving forwards will hit itself.
 (check-expect (going-to-hit-body? (list (make-pos 0 0)
                                         (make-pos 0 1)
@@ -319,8 +318,8 @@
 (define (going-to-hit-body? lop d)
   (hit-body? (update-snake lop d)))
 
-(@htdf hit-body?)
-(@signature (listof Position) -> Boolean)
+;;(@htdf hit-body?)
+;;(@signature (listof Position) -> Boolean)
 ;; Produces true if snake head has hit the body
 (check-expect (hit-body? (list (make-pos 2 1)
                                (make-pos 1 1)
@@ -337,8 +336,8 @@
   (not (false? (check-duplicates s))))
 
 
-(@htdf going-to-eat-food?)
-(@signature (listof Position) Direction Position -> Boolean)
+;;(@htdf going-to-eat-food?)
+;;(@signature (listof Position) Direction Position -> Boolean)
 ;; Produces true if snake head is about to move to a square with food
 ;; i.e. if first element of lop moves in direction of position, does it
 ;;      equal the provided position
@@ -360,15 +359,15 @@
          (= (pos-y next-head) (pos-y p)))))
 
 
-(@htdf next-pos)
-(@signature Position Direction -> Position)
+;;(@htdf next-pos)
+;;(@signature Position Direction -> Position)
 ;; Produces the position incremeneted by 1 in the provided direction
 (check-expect (next-pos (make-pos 2 6) "up") (make-pos 2 5))
 (check-expect (next-pos (make-pos 2 6) "down") (make-pos 2 7))
 (check-expect (next-pos (make-pos 2 6) "right") (make-pos 3 6))
 (check-expect (next-pos (make-pos 2 6) "left") (make-pos 1 6))
 
-(@template Direction)
+;;(@template Direction)
 
 (define (next-pos p d)
   (cond [(string=? "left" d) (make-pos (- (pos-x p) 1) (pos-y p))]
@@ -378,8 +377,8 @@
 
 
 
-(@htdf update-snake)
-(@signature (listof Position) Direction -> (listof Position))
+;;(@htdf update-snake)
+;;(@signature (listof Position) Direction -> (listof Position))
 ;; Updates the lop by appending one position moved in one unit towards direction
 ;; and then removing the last element of the list.
 (check-expect (update-snake (list (make-pos 2 0)
@@ -399,7 +398,7 @@
                     (make-pos 1 0)
                     (make-pos 0 0)))
 
-(@template Direction)
+;;(@template Direction)
 
 (define (update-snake lop d)
   (cons (next-pos (first lop) d)
@@ -410,8 +409,8 @@
 
 
 
-(@htdf render)
-(@signature GameState -> Image)
+;;(@htdf render)
+;;(@signature GameState -> Image)
 ;; Draws the current GameState
 (check-expect (render START-GS) START-SCREEN)
 (check-expect (render LOSE-GS) GAME-OVER-SCREEN)
@@ -443,7 +442,7 @@
                     (get-coordinate (+ (/ CTR-Y CELL-SIZE) 2))
                     MTS)))))))
                                                 
-(@template GameState)
+;;(@template GameState)
 
 (define (render g)
   (cond [(string=? "start" (gs-run g)) START-SCREEN]
@@ -455,8 +454,8 @@
                                 MTS))]))
 
 
-(@htdf draw-food)
-(@signature Position Image -> Image)
+;;(@htdf draw-food)
+;;(@signature Position Image -> Image)
 ;; Draws food on the screen/scene
 (check-expect (draw-food (make-pos (/ CTR-X CELL-SIZE) (/ CTR-Y CELL-SIZE)) MTS)
               (place-image FOOD
@@ -471,8 +470,8 @@
                MTS))
 
 
-(@htdf draw-snake)
-(@signature (listof Position) Image -> Image)
+;;(@htdf draw-snake)
+;;(@signature (listof Position) Image -> Image)
 ;; Draws the snake on the screen
 (check-expect (draw-snake (list (make-pos (/ CTR-X CELL-SIZE) (- (/ CTR-Y CELL-SIZE) 1))
                                 (make-pos (/ CTR-X CELL-SIZE) (/ CTR-Y CELL-SIZE))
@@ -491,7 +490,7 @@
                              (get-coordinate (+ (/ CTR-Y CELL-SIZE) 1))
                              (place-image FOOD 5 5 MTS)))))
 
-(@template (listof Position))
+;;(@template (listof Position))
 
 (define (draw-snake lop img)
   (cond [(empty? lop) img]
@@ -502,8 +501,8 @@
                       (draw-snake (rest lop) img))]))
 
 
-(@htdf get-coordinate)
-(@signature Integer -> Integer)
+;;(@htdf get-coordinate)
+;;(@signature Integer -> Integer)
 ;; Produce the screen coordinates to draw objects from coords stored in position.
 (check-expect (get-coordinate 0) (/ CELL-SIZE 2))
 (check-expect (get-coordinate 5) (+ (* 5 CELL-SIZE) (/ CELL-SIZE 2)))
@@ -512,8 +511,8 @@
   (+ (* i CELL-SIZE) (/ CELL-SIZE 2)))
 
 
-(@htdf click-reset)
-(@signature GameState Integer Integer MouseEvent -> GameState)
+;;(@htdf click-reset)
+;;(@signature GameState Integer Integer MouseEvent -> GameState)
 ;; Resets GameState to initial state when at start, game over, or win screen.
 (check-expect (click-reset EXAMPLE-GS 0 0 "move") EXAMPLE-GS)
 (check-expect (click-reset EXAMPLE-GS 0 0 "button-down") EXAMPLE-GS)
@@ -523,7 +522,7 @@
 (check-expect (click-reset START-GS 0 0 "button-down") INITIAL-GS)
 (check-expect (click-reset START-GS 10 50 "button-down") INITIAL-GS)
 
-(@template MouseEvent)
+;;(@template MouseEvent)
 
 (define (click-reset g x y mevt)
   (cond [(mouse=? "button-down" mevt)
@@ -534,8 +533,8 @@
              g)]
         [else g]))
 
-(@htdf control-direction)
-(@signature GameState KeyEvent -> GameState)
+;;(@htdf control-direction)
+;;(@signature GameState KeyEvent -> GameState)
 (check-expect (control-direction (make-gs (list (make-pos 10 10))
                                           "left"
                                           (make-pos 0 0)
@@ -589,7 +588,7 @@
 (check-expect (control-direction LOSE-GS "left") LOSE-GS)
 (check-expect (control-direction START-GS "left") START-GS)
 
-(@template KeyEvent)
+;;(@template KeyEvent)
 
 (define (control-direction g kevt)
   (cond [(string=? (gs-run g) "running")
